@@ -1,7 +1,7 @@
-Я помню первые дни JavaScript, где вам нужно было реализовывать простую функцию почти для всего, потому что производители браузеров реализовывали функции по-разному. Это относилось не только к специфичным функциям, но и к  основным тоже, таким как ```addEventListener``` ```attachEvent```.
+Я помню первые дни JavaScript, где нужно было реализовывать простую функцию почти для всего, потому что производители браузеров реализовывали функции по-разному. Это относилось не только к специфичным функциям, но и к  основным тоже, таким как ```addEventListener```, ```attachEvent```.
 Времена изменились, но есть еще несколько функций, которые каждый разработчик должен иметь в своем арсенале, для выполнения простых рутиных задач.
 
-## [```debounce```][1]
+### [```debounce```][1]
 
 Функция ```debounce``` может быть незаменимой, когда дело доходит до производительности событий. Если вы не используете функцию ```debounce``` с событиями ```scroll```, ```resize```, ```key*```, вы, вероятно, используете ее неправильно. Вот реализация функции ```debounce```, чтобы сделать ваш код эффективным:
 
@@ -32,7 +32,7 @@
 
 Функция ```debounce``` не будет позволять обратному вызову использоваться более чем один раз в определенный период времени. Это особенно важно при назначении функции обратного вызова для частой "стрельбы" событиями.
 
-## [```poll```][2]
+### [```poll```][2]
 
 Как я уже говорил с функцией ```debounce```, иногда у вас не получится ее подключить для обозначения желаемого состояния - если событие не существует. В этом случае вы должны проверять состояние с интервалами:
 
@@ -59,7 +59,7 @@
 
 Техника "опроса" уже давно используется в вебе и будет оставаться эффективной в будущем!
 
-## [```once```][3]
+### [```once```][3]
 
 Есть моменты, когда вы предпочитаете, чтобы данная функциональность произошло только один раз, аналогично тому, как вы бы использовать событие ```onload```. Этот код предоставляет вам эту функциональность:
 
@@ -86,7 +86,7 @@
     
 Функция ```once``` гарантирует, что данная функция может быть вызвана только один раз, таким образом, предотвращает дублирование инициализации!
 
-## [`getAbsoluteUrl`][4]
+### [`getAbsoluteUrl`][4]
 
 Получение абсолютного URL из переменной строки не так просто, как вы думаете.
 Существует конструктор ```URL```, но он может действовать, если вы не предоставите требуемые параметры (которые иногда не можете). Вот хитрый трюк для получения абсолютного ```URL``` из строки ввода:
@@ -105,13 +105,11 @@
     // Usage
     getAbsoluteUrl('/something'); // http://davidwalsh.name/something
 
-The "burn" element ```href``` handles and URL nonsense for you, providing a
-reliable absolute URL in return.
+"Сжигаемый" элемент ```href``` и URL не имеют значения, обеспечивая надежный и обсолютный URL в ответ.
 
-## [`isNative`][5]
+### [`isNative`][5]
 
-Knowing if a given function is native or not can signal if you're willing to
-override it.  This handy code can give you the answer:
+Как определить, что функция является нативной если она не может сигнализировать, что ее можно переопределить. Этот код может дать вам ответ:
 
     ;(function() {
     
@@ -157,15 +155,12 @@ override it.  This handy code can give you the answer:
     isNative(alert); // true
     isNative(myCustomFunction); // false
     
+Функция выглядит не очень аккуратно, но зато она работает!
 
-The function isn't pretty but it gets the job done!
+### [`insertRule`][6]
 
-## [`insertRule`][6]
-
-We all know that we can grab a NodeList from a selector (via 
-`document.querySelectorAll`) and give each of them a style, but what's more
-efficient is setting that style to a selector (like you do in a stylesheet
-):
+Все мы знаем, что мы можем получить NodeList из селектора (с помощью
+```document.querySelectorAll```) и навесить каждому из них стиль, но эффективнее будет устанавливить стиль селектору (как вы делаете в таблице стилей):
 
     var sheet = (function() {
     	// Create the <style> tag
@@ -187,18 +182,12 @@ efficient is setting that style to a selector (like you do in a stylesheet
     // Usage
     sheet.insertRule("header { float: left; opacity: 0.8; }", 1);
     
+Это особенн полезно, когда работаете с динамическим, AJAX-нагруженным сайтом.
+Если вы установите стиль селектора, вам не придется учитывать его для каждого элемента, который может совпадать с селектором (в настоящее время или в будущем).
 
-This is especially useful when working on a dynamic, AJAX-heavy site.  If you
-set the style to a selector, you don't need to account for styling each element 
-that may match that selector (now or in the future
-).
+### [`matchesSelector`][7]
 
-## [`matchesSelector`][7]
-
-Oftentimes we validate input before moving forward; ensuring a truthy value,
-ensuring forms data is valid, etc.  But how often do we ensure an element 
-qualifies for moving forward?  You can use a`matchesSelector` function to
-validate if an element is of a given selector match:
+Часто мы проверям ввод, прежде чем двигаться дальше; гарантируя корректное значение, обеспечивая корректность данных формы, и т.д. Но, как часто мы гарантируем, что элемент готов для дальнейшей работы с ним? Вы можете использовать функцию ```matchesSelector``` для проверки, что элемент соответствует селектору:
 
     function matchesSelector(el, selector) {
     	var p = Element.prototype;
@@ -210,10 +199,8 @@ validate if an element is of a given selector match:
     
     // Usage
     matchesSelector(document.getElementById('myDiv'), 'div.someSelector[some-attribute=true]')
-    
 
-There you have it:  seven JavaScript functions that every developer should
-keep in their toolbox.  Have a function I missed?  Please share it!
+Теперь у вас есть семь JavaScript функции, которые каждый разработчик должен иметь в своем арсенале. Есть функция, которую я пропустил? Пожалуйста, поделитесь!
 
  [1]: http://davidwalsh.name/javascript-debounce-function
  [2]: http://davidwalsh.name/javascript-polling
