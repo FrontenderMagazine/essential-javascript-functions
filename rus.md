@@ -232,7 +232,7 @@
     // Usage
     matchesSelector(document.getElementById('myDiv'), 'div.someSelector[some-attribute=true]')
 
-Теперь у вас есть семь JavaScript функции, которые каждый разработчик
+Теперь у вас есть семь JavaScript-функций, которые каждый разработчик
 должен иметь в своем арсенале. Есть функция, которую я пропустил?
 Пожалуйста, поделитесь!
 
