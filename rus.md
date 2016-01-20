@@ -9,18 +9,18 @@
 для выполнения простых рутиных задач, которые каждый
 разработчик должен иметь в своём распоряжении.
 
-### [```debounce```][1]
+## `debounce`
 
-Функция ```debounce``` может сыграть важную роль когда дело касается
-производительности событий. Если вы не используете ```debounce```
-с событиями ```scroll```, ```resize```, ```key*```, скорее всего, вы
-делаете что-то не так. Ниже приведен код функции ```debounce```, которая
+Функция [`debounce`][1] может сыграть важную роль когда дело касается
+производительности событий. Если вы не используете `debounce`
+с событиями `scroll`, `resize`, `key*`, скорее всего, вы
+делаете что-то не так. Ниже приведен код функции `debounce`, которая
 поможет повысить производительность вашего кода:
 
-    // Returns a function, that, as long as it continues to be invoked, will not
-    // be triggered. The function will be called after it stops being called for
-    // N milliseconds. If `immediate` is passed, trigger the function on the
-    // leading edge, instead of the trailing.
+    // Возвращает функцию, которая не будет срабатывать, пока продолжает вызываться.
+    // Она сработает только один раз через N миллисекунд после последнего вызова.
+    // Если ей передан аргумент `immediate`, то она будет вызвана один раз сразу после
+    // первого запуска.
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
@@ -35,108 +35,107 @@
     		if (callNow) func.apply(context, args);
     	};
     };
-    
-    // Usage
+     
+    // Использование
     var myEfficientFn = debounce(function() {
-    	// All the taxing stuff you do
+    // All the taxing stuff you do
     }, 250);
     window.addEventListener('resize', myEfficientFn);
 
-```debounce``` не позволит обратному вызову исполняться чаще,
+`debounce` не позволит обратному вызову исполняться чаще,
 чем один раз в заданный период времени. Это особенно важно 
 при назначении функции обратного вызова для часто вызываемых событий.
 
-### [```poll```][2]
+## `poll`
 
-Функцию ```debounce``` не всегда возможно подключить для обозначения
+Функцию `debounce` не всегда возможно подключить для обозначения
 желаемого состояния: если событие не существует — это будет не возможно.
 В этом случае вы должны проверять состояние с помощью интервалов:
 
     function poll(fn, callback, errback, timeout, interval) {
         var endTime = Number(new Date()) + (timeout || 2000);
         interval = interval || 100;
-    
+        
         (function p() {
-                // If the condition is met, we're done! 
+                // Если условие не выполнено, то мы закончили
                 if(fn()) {
                     callback();
                 }
-                // If the condition isn't met but the timeout hasn't elapsed, go again
+                // Если условие выполнено, но таймаут ещё не наступл — повторяем
                 else if (Number(new Date())  0;
         },
         function() {
-            // Done, success callback
+            // Колбек, который будет вызван в случае успеха
         },
         function() {
-            // Error, failure callback
+            // Колбек, который будет вызван в случае неудачи
         }
     );
     
 
-Техника «опроса» уже давно используется в вебе и будет 
-продолжать использоваться в будущем.
+Техника «[опроса][2]» уже давно используется в вебе и будет продолжать использоваться в будущем.
 
-### [```once```][3]
+## `once`
 
 Иногда бывает нужно, чтобы функция выполнилась только один раз, как если
-бы вы использовали событие ```onload```. Функция ```once``` даёт
-такую возможность:
+бы вы использовали событие `onload`. Функция [`once`][3] даёт такую возможность:
 
     function once(fn, context) { 
     	var result;
-    
+        
     	return function() { 
     		if(fn) {
     			result = fn.apply(context || this, arguments);
     			fn = null;
     		}
-    
+            
     		return result;
     	};
     }
-    
-    // Usage
+     
+    // Пример использования
     var canOnlyFireOnce = once(function() {
-    	console.log('Fired!');
+    	console.log('Запущено!');
     });
+     
+    canOnlyFireOnce(); // "Запущено!"
+    canOnlyFireOnce(); // Не запущено
     
-    canOnlyFireOnce(); // "Fired!"
-    canOnlyFireOnce(); // nada
-    
-```once``` гарантирует, что заданная функция будет 
-вызвана только один раз, что предотвращает повторную инициализацию.
+`once` гарантирует, что заданная функция будет вызвана только один раз,
+что предотвращает повторную инициализацию.
 
-### [`getAbsoluteUrl`][4]
+## `getAbsoluteUrl`
 
-Получить абсолютный URL из строчной переменной не так просто, как кажется.
-Существует конструктор ```URL```, но он «барахлит», если вы не
+[Получить абсолютный URL][4] из строчной переменной не так просто, как кажется.
+Существует конструктор `URL`, но он «барахлит», если вы не
 предоставите требуемые параметры (которых у вас может не быть). 
-Вот хитрый способ получить абсолютный ```URL``` из строки:
+Вот хитрый способ получить абсолютный `URL` из строки:
 
     var getAbsoluteUrl = (function() {
     	var a;
-    
+        
     	return function(url) {
     		if(!a) a = document.createElement('a');
     		a.href = url;
-    
+            
     		return a.href;
     	};
     })();
-    
-    // Usage
+        
+    // Пример использования
     getAbsoluteUrl('/something'); // http://davidwalsh.name/something
 
-Передаваемый на вход ```href``` и URL не имеют значения, функция 
+Передаваемый на вход `href` и URL не имеют значения, функция 
 в любом случае вернёт надежный абсолютный URL в ответ.
 
-### [`isNative`][5]
+
+## `isNative`
 
 Знание является ли функция нативной может быть полезно, если вы
 хотите её переопределить. Этот код поможет вам знать наверняка:
 
     ;(function() {
-    
+        
       // Used to resolve the internal `[[Class]]` of values
       var toString = Object.prototype.toString;
       
@@ -145,7 +144,7 @@
       
       // Used to detect host constructors (Safari > 4; really typed array specific)
       var reHostCtor = /^\[object .+?Constructor\]$/;
-    
+        
       // Compile a regexp using a common native method as a template.
       // We chose `Object#toString` because there's a good chance it is not being mucked with.
       var reNative = RegExp('^' +
@@ -171,41 +170,42 @@
           : (value && type == 'object' && reHostCtor.test(toString.call(value))) || false;
       }
       
-      // export however you want
+      // Экспортируете то, что сочтете нужным
       module.exports = isNative;
     }());
-    
-    // Usage
+        
+    // Пример использования
     isNative(alert); // true
     isNative(myCustomFunction); // false
     
 Функция выглядит не очень аккуратно, но она работает!
 
-### [`insertRule`][6]
+
+## `insertRule`
 
 Все мы знаем, что можно получить список элементов по селектору
-(с помощью ```document.querySelectorAll```) и добавить каждому из 
+(с помощью `document.querySelectorAll`) и добавить каждому из 
 них стили, но более эффективным будет задать те же стили селектору 
-(как вы делаете в таблице стилей):
+(как вы делаете в таблице стилей), с помощью функции [`insertRule`][6]:
 
     var sheet = (function() {
-    	// Create the <style> tag
+    	// Создаем элемент <style>
     	var style = document.createElement('style');
-    
-    	// Add a media (and/or media query) here if you'd like!
+        
+    	// Если хотите, то добавляем атрибут `media` (и/или медиа-выйражения)
     	// style.setAttribute('media', 'screen')
     	// style.setAttribute('media', 'only screen and (max-width : 1024px)')
-    
-    	// WebKit hack :(
+        
+    	// Хак для WebKit :(
     	style.appendChild(document.createTextNode(''));
-    
-    	// Add the <style> element to the page
+        
+    	// Добавляем на страницу элемент <style>
     	document.head.appendChild(style);
-    
+        
     	return style.sheet;
     })();
-    
-    // Usage
+        
+    // Пример использования
     sheet.insertRule("header { float: left; opacity: 0.8; }", 1);
     
 Это будет особенно полезным когда вы работаете с динамическим сайтом
@@ -214,24 +214,26 @@
 элементов, которые могут соответствовать этому селектору сейчас 
 или в будущем.
 
-### [`matchesSelector`][7]
+
+## `matchesSelector`
 
 Как правило, мы проверям входные данные, прежде чем продолжать 
 что-то делать: удостверяемся, что значение верно, что содержимое 
 формы валидно, и т.д.
+
 Но как часто мы проверяем, что имеющийся элемент подходит 
 для дальнейших действий? Для проверки соответствия элемента
-заданному селектору вы можете использовать функцию ```matchesSelector```:
+заданному селектору вы можете использовать функцию [`matchesSelector`][7]:
 
     function matchesSelector(el, selector) {
-    	var p = Element.prototype;
-    	var f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector || function(s) {
-    		return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
-    	};
-    	return f.call(el, selector);
+        var p = Element.prototype;
+        var f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector || function(s) {
+            return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+        };
+        return f.call(el, selector);
     }
-    
-    // Usage
+     
+    // Пример использования
     matchesSelector(document.getElementById('myDiv'), 'div.someSelector[some-attribute=true]')
 
 Теперь у вас есть семь JavaScript-функций, которые каждый разработчик
