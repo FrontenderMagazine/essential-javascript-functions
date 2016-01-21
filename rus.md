@@ -72,6 +72,18 @@
       })();
     }
     
+    // При использовании: убедитесь что элемент видим
+    poll(
+        function() {
+            return document.getElementById('lightbox').offsetWidth > 0;
+        },
+        function() {
+            // Done, success callback
+        },
+        function() {
+            // Error, failure callback
+        }
+    );
 
 Техника «[опроса][2]» уже давно используется в вебе и будет продолжать использоваться в будущем.
 
