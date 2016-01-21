@@ -53,24 +53,24 @@
 В этом случае вы должны проверять состояние с помощью интервалов:
 
     function poll(fn, callback, errback, timeout, interval) {
-        var endTime = Number(new Date()) + (timeout || 2000);
-        interval = interval || 100;
-        
-        (function p() {
-                // Если условие не выполнено, то мы закончили
-                if(fn()) {
-                    callback();
-                }
-                // Если условие выполнено, но таймаут ещё не наступл — повторяем
-                else if (Number(new Date())  0;
-        },
-        function() {
-            // Колбек, который будет вызван в случае успеха
-        },
-        function() {
-            // Колбек, который будет вызван в случае неудачи
+      var endTime = Number(new Date()) + (timeout || 2000);
+      interval = interval || 100;
+      
+      (function p() {
+        // В случае успешного выполнения
+        if(fn()) {
+          callback();
         }
-    );
+        // Условие не выполнилось, но время не вышло
+        else if (Number(new Date()) < endTime) {
+          setTimeout(p, interval);
+        }
+        // Условие не выполнилось, а отведённое время вышло
+        else {
+          errback(new Error('timed out for ' + fn + ': ' + arguments));
+        }
+      })();
+    }
     
 
 Техника «[опроса][2]» уже давно используется в вебе и будет продолжать использоваться в будущем.
